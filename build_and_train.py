@@ -25,20 +25,19 @@ for cell in os.listdir(cdir):
     cells.append((np.array(pdata), target))
 
 stime = time.time()
-    
+
+NET_PATH = "net.pkl"
 net = None
-if os.path.exists('net.pkl'):
+if os.path.exists(NET_PATH):
     print("loaded")
-    net_file = open('net2.pkl','rb')
-    net = pickle.load(net_file)
-    net_file.close()
+    with open(NET_PATH,'rb') as net_file:
+        net = pickle.load(net_file)
 else:
     net = MLP(150,30,10)
     net.train(cells,500,2)
-print("dumped")
-net_file = open("net2.pkl",'wb')
-pickle.dump(net,net_file)
-net_file.close()
+    with open(NET_PATH,'rb') as net_file:
+        pickle.dump(net,net_file)
+    print("dumped")
     
 etime = time.time() -stime
 print("%s min %s secs" % (int(etime/60),etime%60))
